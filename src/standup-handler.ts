@@ -1,3 +1,4 @@
+import { IAttachment, ISlackRequest, IStandupPostback } from './slack-types';
 import * as moment from 'moment';
 import { Response } from 'express';
 import {
@@ -5,30 +6,6 @@ import {
   getStandupsForDate,
   IStandupPost
 } from './standup-store';
-
-// prob should go in types file?
-export interface ISlackRequest {
-  token: string;
-  team_id: string;
-  team_domain: string;
-  channel_id: string;
-  channel_name: string;
-  user_id: string;
-  user_name: string;
-  command: string;
-  text: string;
-  response_url: string;
-}
-
-interface IAttachment {
-  text: string;
-}
-
-interface IStandupPostback {
-  response_type: string;
-  text: string;
-  attachments?: IAttachment[];
-}
 
 const formatStandupMessage = (post: IStandupPost) =>
   `<@${post.userId}> - ${post.standupMessage}`;
