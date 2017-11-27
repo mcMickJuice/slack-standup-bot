@@ -11,14 +11,13 @@ const verifySlackMiddleware = (
   res: Response,
   next: () => void
 ) => {
-  console.log('slack verify');
-
   const { token } = req.body;
 
   if (token !== config.slackToken) {
     res
       .status(403)
       .send('Invalid Request. Is this from a configured slack app?');
+    return;
   }
 
   next();

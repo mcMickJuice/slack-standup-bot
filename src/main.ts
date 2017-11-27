@@ -6,10 +6,6 @@ import handler from './handler';
 const app = express();
 
 app.use(bodyParser.urlencoded());
-app.use((req, res, next) => {
-  console.log(req.path);
-  next();
-});
 
 app.use(verifySlackMiddleware);
 
