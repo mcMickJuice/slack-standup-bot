@@ -6,7 +6,8 @@
     "quotemark": [true, "single"],
     "semicolon": false,
     "no-console": false,
-    "ordered-imports": false
+    "ordered-imports": false,
+    "trailing-comma": false
   },
   "rulesDirectory": []
 }

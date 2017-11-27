@@ -62,3 +62,5 @@ dist/
 
 # vscode settings
 settings.json
+
+config.ts

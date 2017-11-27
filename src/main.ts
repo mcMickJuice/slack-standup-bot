@@ -1,6 +1,8 @@
+import verifySlackMiddleware from './verify-slack-middleware';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import handler from './handler';
+import config from './config';
 
 const app = express();
 
@@ -9,6 +11,8 @@ app.use((req, res, next) => {
   console.log(req.path);
   next();
 });
+
+app.use(verifySlackMiddleware);
 
 app.post('/standup', (req, res) => {
   const request = req.body;
