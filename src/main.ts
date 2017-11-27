@@ -2,6 +2,11 @@ import * as express from 'express';
 
 const app = express();
 
+app.use((req, res, next) => {
+  console.log(req.path);
+  next();
+});
+
 app.get('/', (_, res) => {
   res.send('hello!');
 });
