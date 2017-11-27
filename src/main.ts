@@ -2,11 +2,10 @@ import verifySlackMiddleware from './verify-slack-middleware';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import handler from './handler';
-import config from './config';
 
 const app = express();
 
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 app.use((req, res, next) => {
   console.log(req.path);
   next();

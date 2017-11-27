@@ -1,4 +1,4 @@
-interface ISlackRequest {
+export interface ISlackRequest {
   token: string;
   team_id: string;
   team_domain: string;
