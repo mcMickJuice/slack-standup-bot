@@ -11,9 +11,7 @@ app.use(verifySlackMiddleware);
 
 app.post('/standup', (req, res) => {
   const request = req.body;
-  handler(request);
-
-  res.send('acknowledged');
+  handler(request, res);
 });
 
 const port = process.env.PORT || 3001;
