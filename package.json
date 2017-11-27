@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "body-parser": "^1.18.2",
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "moment": "^2.19.2"
   },
   "scripts": {
     "build": "tsc --outDir ./dist ./src/main.ts",

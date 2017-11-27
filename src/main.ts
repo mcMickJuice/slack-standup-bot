@@ -1,7 +1,7 @@
 import verifySlackMiddleware from './verify-slack-middleware';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
-import handler from './handler';
+import handler from './standup-handler';
 
 const app = express();
 

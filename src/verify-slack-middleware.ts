@@ -1,4 +1,4 @@
-import { ISlackRequest } from './handler';
+import { ISlackRequest } from './standup-handler';
 import config from './config';
 import { Request, Response } from 'express';
 
