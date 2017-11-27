@@ -16,7 +16,6 @@ export interface ISlackRequest {
 }
 interface IStandupPost {
   userId: string;
-  userName: string;
   standupMessage: string;
 }
 
@@ -28,10 +27,31 @@ interface IStore {
   [room: string]: IStandupSession;
 }
 
+interface IAttachment {
+  text: string;
+}
+
+interface IStandupPostback {
+  response_type: string;
+  text: string;
+  attachments?: IAttachment[];
+}
+
 const store: IStore = {};
 
 const formatStandupMessage = (post: IStandupPost) =>
-  `@${post.userName} - ${post.standupMessage}`;
+  `<@${post.userId}> - ${post.standupMessage}`;
+
+const buildStandupPostback = (
+  message: string,
+  attachments?: IAttachment[]
+): IStandupPostback => {
+  return {
+    response_type: 'in_channel',
+    text: message,
+    attachments
+  };
+};
 
 const handler = (request: ISlackRequest, res: Response) => {
   // if text is empty, post all standup messages for today
@@ -42,21 +62,26 @@ const handler = (request: ISlackRequest, res: Response) => {
   if (text.length === 0) {
     const channelPosts = store[channel_id];
 
-    if (channelPosts == null) {
-      res.send('no posts for today');
+    if (
+      channelPosts == null ||
+      channelPosts[today] == null ||
+      channelPosts[today].length === 0
+    ) {
+      res.send(buildStandupPostback('No Posts for Today'));
       return;
     }
 
     const todaysPosts = channelPosts[today];
 
-    if (todaysPosts == null || todaysPosts.length === 0) {
-      res.send('no posts for today');
-      return;
-    }
+    const posts = todaysPosts.map((post: IStandupPost) => {
+      return {
+        text: formatStandupMessage(post)
+      };
+    });
 
-    const posts = todaysPosts.map(formatStandupMessage);
-
-    res.send(['Here are standups for today', ...posts].join('/n'));
+    res.send(
+      buildStandupPostback('<!here> Here are standups for today', posts)
+    );
   } else {
     let room: IStandupSession = {};
     if (store[channel_id] == null) {
@@ -67,7 +92,6 @@ const handler = (request: ISlackRequest, res: Response) => {
 
     const post: IStandupPost = {
       userId: user_id,
-      userName: user_name,
       standupMessage: text
     };
     let todaysPosts: IStandupPost[] = [];
@@ -78,9 +102,11 @@ const handler = (request: ISlackRequest, res: Response) => {
     }
     todaysPosts.push(post);
 
-    console.log(JSON.stringify(store, null, 2));
-
-    res.send(formatStandupMessage(post));
+    res.send(
+      buildStandupPostback(`<!here> Here is <@${user_id}>'s standup`, [
+        { text: post.standupMessage }
+      ])
+    );
   }
 };
 
